@@ -8,6 +8,14 @@ const errorHandler = (err, req, res, next) => {
                 e.code === "invalid_type" &&
                 e.message.includes("undefined")
             ) {
+
+                if (e.path.length < 1) {
+                    return {
+                        field: "all fields",
+                        message: `no data filled in`,
+                    };
+                }
+
                 return {
                     field: e.path[0],
                     message: `${e.path[0]} is required`,
@@ -35,6 +43,7 @@ const errorHandler = (err, req, res, next) => {
         });
 
         return res.status(400).json({
+            status: "error",
             message: "Validation Error",
             errors,
         });
@@ -42,8 +51,10 @@ const errorHandler = (err, req, res, next) => {
 
     if (err.name === "SequelizeUniqueConstraintError") {
         return res.status(409).json({
+            status: "error",
             message: "Conflict Error",
             errors: err.errors.map((e) => ({
+                status: "error",
                 field: e.path,
                 message: e.message,
             })),
@@ -76,6 +87,28 @@ const errorHandler = (err, req, res, next) => {
             errors: [{
                 message: err.message,
             }],
+        });
+    }
+
+    if (err.name === "conflict") {
+        return res.status(409).json({
+            status: "error",
+            message: err.message,
+            errors: err.errors || [],
+        });
+    }
+
+    if (err.name === "not_found") {
+        return res.status(404).json({
+            status: "error",
+            message: err.message,
+        })
+    }
+
+    if (err.name === "unauthorized") {
+        return res.status(401).json({
+            status: "error",
+            message: err.message,
         });
     }
 
