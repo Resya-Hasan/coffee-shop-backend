@@ -105,6 +105,13 @@ const errorHandler = (err, req, res, next) => {
         })
     }
 
+    if (err.name === "JsonWebTokenError") {
+        return res.status(401).json({
+            status: "error",
+            message: "Invalid token",
+        });
+    }
+
     if (err.name === "unauthorized") {
         return res.status(401).json({
             status: "error",

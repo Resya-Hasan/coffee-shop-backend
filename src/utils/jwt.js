@@ -15,13 +15,8 @@ const generateToken = (user) => {
 }
 
 const verifyToken = (token) => {
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return decoded;
-    } catch(err) {
-        console.error(err);
-        throw new Error('Invalid token');
-    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return decoded;
 }
 
 module.exports = {

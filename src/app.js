@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const { errorHandler } = require('./middlewares/errorHandler.middleware');
+const authenticationMiddleware = require('./middlewares/authentication.middleware');
 
 const app = express();
 const upload = multer();
@@ -10,6 +11,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth',upload.none(), require('./routes/auth.routes'));
+
+app.use(authenticationMiddleware);
+
+app.use('/api/users', upload.none(), require('./routes/user.routes'));
 
 app.use(errorHandler)
 
