@@ -31,7 +31,7 @@ const errorHandler = (err, req, res, next) => {
 
             if (e.code === "custom") {
                 return {
-                    field: "confirmPassword",
+                    field: "custom",
                     message: e.message,
                 };
             }
@@ -46,6 +46,20 @@ const errorHandler = (err, req, res, next) => {
             status: "error",
             message: "Validation Error",
             errors,
+        });
+    }
+
+    if (err.name === "JsonWebTokenError") {
+        return res.status(401).json({
+            status: "error",
+            message: "Invalid token",
+        });
+    }
+
+    if (err.name === "unauthorized") {
+        return res.status(401).json({
+            status: "error",
+            message: err.message,
         });
     }
 
@@ -103,20 +117,6 @@ const errorHandler = (err, req, res, next) => {
             status: "error",
             message: err.message,
         })
-    }
-
-    if (err.name === "JsonWebTokenError") {
-        return res.status(401).json({
-            status: "error",
-            message: "Invalid token",
-        });
-    }
-
-    if (err.name === "unauthorized") {
-        return res.status(401).json({
-            status: "error",
-            message: err.message,
-        });
     }
 
     res.status(500).json({
