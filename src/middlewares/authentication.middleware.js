@@ -40,8 +40,6 @@ const authenticationMiddleware = (req, res, next ) => {
         id: isVerified.id,
     }
 
-    console.log(req.user, "<<<<<");
-
     next()
 }
 

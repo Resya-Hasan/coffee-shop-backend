@@ -1,4 +1,4 @@
-const { registerSchema } = require('../validations/user.schema');
+const { registerSchema } = require('../validations/auth.schema');
 const { User } = require('../models');
 const { generateToken } = require('../utils/jwt');
 const { comparePassword } = require('../utils/bcrypt');
@@ -26,6 +26,7 @@ module.exports = class AuthController {
             )
 
             res.status(201).json({
+                status: "success",
                 message: "Registration successful",
                 data: {
                     id: newUser.id,
@@ -64,8 +65,11 @@ module.exports = class AuthController {
             const token = generateToken({ id: user.id, email: user.email });
 
             res.status(200).json({
+                status: "success",
                 message: "login successful",
-                token
+                data: {
+                    token
+                }
             })
         } catch (err) {
             next(err)
