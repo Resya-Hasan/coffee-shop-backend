@@ -83,4 +83,20 @@ module.exports = class UserController {
             next(err)
         }
     }
+
+    static async updateFotoProfile(req, res, next) {
+        try {
+            const userId = req.user.id
+
+            res.status(201).json({
+                status: "success",
+                message: "Foto profile updated successfully",
+                data: {
+                    userId
+                }
+            })
+        } catch(err) {
+            next(err)
+        }
+    }
 }
