@@ -119,6 +119,29 @@ const errorHandler = (err, req, res, next) => {
         })
     }
 
+    if (err.name === "bad_request") {
+
+        if (err.message.includes("Unexpected end of form")) {
+            return res.status(400).json({
+                status: "error",
+                message: "File upload failed, please try again.",
+            });
+        }
+
+        if (err.message.includes("Only images are allowed")) {
+            return res.status(400).json({
+                status: "error",
+                message: "Only image files are allowed.",
+            });
+        }
+
+        return res.status(400).json({
+            status: "error",
+            message: err.message,
+            errors: err.errors || [],
+        });
+    }
+
     res.status(500).json({
         message: "Internal Server Error",
     })
