@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Gayo",
+    "origin": "Aceh",
+    "island": "Sumatra",
+    "flavorNotes": ["earthy", "spicy", "low acidity"]
+  },
+  {
+    "name": "Mandailing",
+    "origin": "Sumatra Utara",
+    "island": "Sumatra",
+    "flavorNotes": ["chocolate", "herbal", "full body"]
+  },
+  {
+    "name": "Lintong",
+    "origin": "Sumatra Utara",
+    "island": "Sumatra",
+    "flavorNotes": ["sweet", "spicy", "low acidity"]
+  },
+  {
+    "name": "Toraja",
+    "origin": "Sulawesi Selatan",
+    "island": "Sulawesi",
+    "flavorNotes": ["earthy", "dark chocolate", "rich body"]
+  },
+  {
+    "name": "Kintamani",
+    "origin": "Bali",
+    "island": "Bali",
+    "flavorNotes": ["citrus", "floral", "bright acidity"]
+  },
+  {
+    "name": "Java Preanger",
+    "origin": "Jawa Barat",
+    "island": "Java",
+    "flavorNotes": ["nutty", "sweet", "balanced"]
+  },
+  {
+    "name": "Flores Bajawa",
+    "origin": "Nusa Tenggara Timur",
+    "island": "Flores",
+    "flavorNotes": ["chocolate", "caramel", "low acidity"]
+  },
+  {
+    "name": "Papua Wamena",
+    "origin": "Papua",
+    "island": "Papua",
+    "flavorNotes": ["fruity", "floral", "clean finish"]
+  },
+  {
+    "name": "Lampung",
+    "origin": "Lampung",
+    "island": "Sumatra",
+    "flavorNotes": ["strong body", "smoky", "bold"]
+  },
+  {
+    "name": "Bengkulu",
+    "origin": "Bengkulu",
+    "island": "Sumatra",
+    "flavorNotes": ["earthy", "spicy", "medium body"]
+  }
+]

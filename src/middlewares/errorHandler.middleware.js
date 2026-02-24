@@ -1,5 +1,6 @@
 const errorHandler = (err, req, res, next) => {
     console.log(err);
+    console.log(err.name, "<<<<<<");
 
     if (err.name === "ZodError") {
         const errors = err.issues.map((e) => {
@@ -53,6 +54,13 @@ const errorHandler = (err, req, res, next) => {
         return res.status(401).json({
             status: "error",
             message: "Invalid token",
+        });
+    }
+
+    if (err.name === "TokenExpiredError") {
+        return res.status(401).json({
+            status: "error",
+            message: "Your session has expired. Please login again.",
         });
     }
 
@@ -139,6 +147,13 @@ const errorHandler = (err, req, res, next) => {
             status: "error",
             message: err.message,
             errors: err.errors || [],
+        });
+    }
+
+    if (err.name === "forbidden") {
+        return res.status(403).json({
+            status: "error",
+            message: err.message,
         });
     }
 

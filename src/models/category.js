@@ -35,6 +35,34 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Name must be between 3 and 50 characters long'
         }
       }
+    },
+    origin: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Origin cannot be empty'
+        },
+        notNull: {
+          msg: 'Origin is required'
+        }
+      }
+    },
+    island: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Island cannot be empty'
+        },
+        notNull: {
+          msg: 'Island is required'
+        }
+      }
+    },
+    flavorNotes: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
     }
   }, {
     sequelize,
