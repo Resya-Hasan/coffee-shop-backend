@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const UserController = require('../controller/user.controllers');
+const UserController = require('../controllers/user.controllers');
 const { uploadSingle } = require('../middlewares/uploadwrapper.middleware');
 
 router.get('/profile', UserController.getProfile);

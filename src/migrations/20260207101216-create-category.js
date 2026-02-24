@@ -13,6 +13,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      origin: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      island: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      flavorNotes: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

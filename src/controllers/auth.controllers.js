@@ -62,7 +62,7 @@ module.exports = class AuthController {
                 }
             }
 
-            const token = generateToken({ id: user.id, email: user.email });
+            const token = generateToken({ id: user.id, email: user.email, role: user.role });
 
             res.status(200).json({
                 status: "success",

@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Price must be an integer"
         },
         min: {
-          args: 0,
+          args: [0],
           msg: "Price must be a positive number"
         },
         notNull: {
@@ -79,12 +79,13 @@ module.exports = (sequelize, DataTypes) => {
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 1,
       validate: {
         isInt: {
           msg: "Stock must be an integer"
         },
         min: {
-          args: 0,
+          args: [0],
           msg: "Stock must be a non-negative number"
         },
         notNull: {
@@ -101,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Sold must be an integer"
         },
         min: {
-          args: 0,
+          args: [0],
           msg: "Sold must be a non-negative number"
         },
         notNull: {
@@ -119,9 +120,6 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'SET NULL',
       allowNull: false,
       validate: {
-        isInt: {
-          msg: "Category ID must be an integer"
-        },
         notNull: {
           msg: "Category ID is required"
         }
@@ -146,6 +144,7 @@ module.exports = (sequelize, DataTypes) => {
     isActive: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: true,
       validate: {
         notNull: {
           msg: "isActive is required"

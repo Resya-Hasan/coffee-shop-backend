@@ -38,6 +38,7 @@ const authenticationMiddleware = (req, res, next ) => {
 
     req.user = {
         id: isVerified.id,
+        role: isVerified.role,
     }
 
     next()

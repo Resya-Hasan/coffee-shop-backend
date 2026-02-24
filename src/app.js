@@ -15,6 +15,7 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use(authenticationMiddleware);
 
 app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/coffees', require('./routes/coffee.routes'));
 
 app.use(errorHandler)
 
