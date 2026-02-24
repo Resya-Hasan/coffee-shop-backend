@@ -75,4 +75,71 @@ module.exports = class CoffeeController {
             next(err);
         }
     }
+
+    static async updateCoffee(req, res, next) {
+        try {
+            const { id } = req.params;
+
+            const coffee = await Coffee.findByPk(id);
+            if (!coffee) {
+                throw {
+                    name: "not_found",
+                    message: "Coffee not found",
+                };
+            }
+
+            if (req.body.categoryId) {
+                const category = await Category.findByPk(req.body.categoryId);
+                if (!category) {
+                    throw {
+                        name: "not_found",
+                        message: "Category not found",
+                    };
+                }
+            }
+
+            const updateData = {
+                ...coffee.toJSON(),
+                ...req.body,
+            }
+
+            updateData.slug = updateData.name.toLowerCase()
+                .replace(/\s+/g, "-")
+                .replace(/[^\w-]+/g, "");
+
+            await coffee.update(updateData);
+
+            res.status(200).json({
+                status: "success",
+                message: "Coffee updated successfully",
+                data: coffee,
+            });
+        } catch (err) {
+            next(err);
+        }
+
+    }
+
+    static async deleteCoffee(req, res, next) {
+        try {
+            const { id } = req.params;
+
+            const coffee = await Coffee.findByPk(id);
+            if (!coffee) {
+                throw {
+                    name: "not_found",
+                    message: "Coffee not found",
+                };
+            }
+
+            await coffee.destroy();
+
+            res.status(200).json({
+                status: "success",
+                message: "Coffee deleted successfully",
+            });
+        } catch(err) {
+            next(err)
+        }
+    }
 }
