@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      CoffeeImage.belongsTo(models.Coffee, { foreignKey: 'coffeeId' });
     }
   }
   CoffeeImage.init({
@@ -34,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     imgUrl: {
       type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="
+      defaultValue: "https://imgs.search.brave.com/v32MO73ybj4I0fNwlWUU6DmFm_UOsMXyRoOchwBNI7s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wbGFj/ZWhvbGQubmV0L3By/b2R1Y3Quc3Zn"
     }
   }, {
     sequelize,
