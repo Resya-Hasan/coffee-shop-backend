@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('CoffeeImages', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       coffeeId: {
         type: Sequelize.UUID,

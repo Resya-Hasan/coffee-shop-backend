@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Coffee.belongsTo(models.Category, { foreignKey: 'categoryId' });
+      Coffee.hasMany(models.CoffeeImage, { foreignKey: 'coffeeId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
   }
   Coffee.init({
@@ -150,6 +152,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: "isActive is required"
         }
       }
+    },
+    image: {
+      type: DataTypes.UUID,
+      allowNull: true,
     }
   }, {
     sequelize,
