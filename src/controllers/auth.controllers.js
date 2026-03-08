@@ -62,12 +62,15 @@ module.exports = class AuthController {
                 }
             }
 
+            const { password: _, ...userData } = user.toJSON();
+
             const token = generateToken({ id: user.id, email: user.email, role: user.role });
 
             res.status(200).json({
                 status: "success",
                 message: "login successful",
                 data: {
+                    user: userData,
                     token
                 }
             })
