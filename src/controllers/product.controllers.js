@@ -1,51 +1,75 @@
-const { Coffee, Category, CoffeeImage } = require('../models');
-const cloudinary = require('../config/cloudinary.config')
-const streamifier = require('streamifier')
+const { Product, Category, ProductImage } = require('../models');
+const { uploadWithRetry } = require('../helper/cloudinary');
 
-module.exports = class CoffeeController {
-    static async getAllCoffees(req, res, next) {
+module.exports = class ProductController {
+    static async getAllProducts(req, res, next) {
         try {
-            const coffees = await Coffee.findAll({
+            const { search } = req.query;
+
+            const where = {}
+
+            if (search) {
+                where.name = {
+                    [Op.iLike]: `${search}`
+                }
+            }
+
+            const products = await Product.findAll({
+                where,
                 order: [['createdAt', 'DESC']],
                 include: {
-                    model: CoffeeImage,
+                    model: ProductImage,
                 }
             });
 
+            const result = products.map(el => ({
+                id: el.id,
+                name: el.name,
+                description: el.description,
+                productInformation: el.productInformation,
+                price: el.price,
+                stock: el.stock,
+                sold: el.sold,
+                categoryId: el.categoryId,
+                slug: el.slug,
+                isActive: el.isActive,
+                images: el.ProductImages.map(img => img.imgUrl)
+            }))
+
             res.status(200).json({
                 status: "success",
-                message: "Coffees retrieved successfully",
-                data: coffees,
+                message: "Products retrieved successfully",
+                data: result,
             });
         } catch (err) {
             next(err);
         }
     }
 
-    static async getCoffeeById(req, res, next) {
+    static async getProductById(req, res, next) {
         try {
             const { id } = req.params;
 
-            const coffee = await Coffee.findByPk(id);
+            const product = await Product.findByPk(id);
 
-            if (!coffee) {
+            if (!product) {
                 throw {
                     name: "not_found",
-                    message: "Coffee not found",
+                    message: "Product not found",
                 };
             }
 
             res.status(200).json({
                 status: "success",
-                message: "Coffee retrieved successfully",
-                data: coffee,
+                message: "Product retrieved successfully",
+                data: product,
             });
         } catch (err) {
             next(err);
         }
     }
 
-    static async createCoffee(req, res, next) {
+    static async createProduct(req, res, next) {
         try {
             const { name, description, productInformation, price, stock, categoryId } = req.body;
             const image = req.file
@@ -61,24 +85,6 @@ module.exports = class CoffeeController {
                 }
             }
 
-            let imageUrl = null;
-
-            const result = await new Promise((resolve, reject) => {
-                const strem = cloudinary.uploader.upload_stream(
-                    { folder: "coffee-images" },
-                    (err, result) => {
-                        if (result) resolve(result)
-                        else reject(err)
-                    }
-                )
-
-                streamifier
-                    .createReadStream(image.buffer)
-                    .pipe(strem)
-            })
-
-            imageUrl = result.secure_url;
-
             const category = await Category.findByPk(categoryId);
             if (!category) {
                 throw {
@@ -87,11 +93,13 @@ module.exports = class CoffeeController {
                 };
             }
 
+            const result = await uploadWithRetry(image.buffer, "products-images");
+
             const slug = name.toLowerCase()
                 .replace(/\s+/g, "-")
                 .replace(/[^\w-]+/g, "");
 
-            const coffee = await Coffee.create({
+            const product = await Product.create({
                 name,
                 description,
                 productInformation,
@@ -101,17 +109,17 @@ module.exports = class CoffeeController {
                 slug,
             });
 
-            const coffeeImage = await CoffeeImage.create({
-                imgUrl: imageUrl,
-                coffeeId: coffee.id,
+            const productImage = await ProductImage.create({
+                imgUrl: result.secure_url,
+                productId: product.id,
             });
 
             res.status(201).json({
                 status: "success",
-                message: "Coffee created successfully",
+                message: "Product created successfully",
                 data: {
-                    coffee,
-                    coffeeImage
+                    product,
+                    productImage
                 },
             });
         } catch (err) {
@@ -119,15 +127,15 @@ module.exports = class CoffeeController {
         }
     }
 
-    static async updateCoffee(req, res, next) {
+    static async updateProduct(req, res, next) {
         try {
             const { id } = req.params;
 
-            const coffee = await Coffee.findByPk(id);
-            if (!coffee) {
+            const product = await Product.findByPk(id);
+            if (!product) {
                 throw {
                     name: "not_found",
-                    message: "Coffee not found",
+                    message: "Product not found",
                 };
             }
 
@@ -142,7 +150,7 @@ module.exports = class CoffeeController {
             }
 
             const updateData = {
-                ...coffee.toJSON(),
+                ...product.toJSON(),
                 ...req.body,
             }
 
@@ -150,12 +158,12 @@ module.exports = class CoffeeController {
                 .replace(/\s+/g, "-")
                 .replace(/[^\w-]+/g, "");
 
-            await coffee.update(updateData);
+            await Product.update(updateData);
 
             res.status(200).json({
                 status: "success",
-                message: "Coffee updated successfully",
-                data: coffee,
+                message: "Product updated successfully",
+                data: product,
             });
         } catch (err) {
             next(err);
@@ -163,23 +171,23 @@ module.exports = class CoffeeController {
 
     }
 
-    static async deleteCoffee(req, res, next) {
+    static async deleteProduct(req, res, next) {
         try {
             const { id } = req.params;
 
-            const coffee = await Coffee.findByPk(id);
-            if (!coffee) {
+            const product = await Product.findByPk(id);
+            if (!product) {
                 throw {
                     name: "not_found",
-                    message: "Coffee not found",
+                    message: "Product not found",
                 };
             }
 
-            await coffee.destroy();
+            await Product.destroy();
 
             res.status(200).json({
                 status: "success",
-                message: "Coffee deleted successfully",
+                message: "Product deleted successfully",
             });
         } catch (err) {
             next(err)

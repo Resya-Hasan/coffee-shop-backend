@@ -2,18 +2,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('CoffeeImages', {
+    await queryInterface.createTable('ProductImages', {
       id: {
         allowNull: false,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         type: Sequelize.UUID
       },
-      coffeeId: {
+      productId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Coffees',
+          model: 'Products',
           key: 'id'
         },
         onDelete: 'CASCADE',
@@ -35,6 +35,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('CoffeeImages');
+    await queryInterface.dropTable('ProductImages');
   }
 };
