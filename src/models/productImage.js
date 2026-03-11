@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class CoffeeImage extends Model {
+  class ProductImage extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      CoffeeImage.belongsTo(models.Coffee, { foreignKey: 'coffeeId' });
+      ProductImage.belongsTo(models.Product, { foreignKey: 'productId' });
     }
   }
-  CoffeeImage.init({
+  ProductImage.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    coffeeId: {
+    productId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Coffees',
+        model: 'Products',
         key: 'id'
       },
       onDelete: 'CASCADE',
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'CoffeeImage',
+    modelName: 'ProductImage',
   });
-  return CoffeeImage;
+  return ProductImage;
 };

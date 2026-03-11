@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Coffee extends Model {
+  class Product extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Coffee.belongsTo(models.Category, { foreignKey: 'categoryId' });
-      Coffee.hasMany(models.CoffeeImage, { foreignKey: 'coffeeId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Product.belongsTo(models.Category, { foreignKey: 'categoryId' });
+      Product.hasMany(models.ProductImage, { foreignKey: 'productId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
   }
-  Coffee.init({
+  Product.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -152,14 +152,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: "isActive is required"
         }
       }
-    },
-    image: {
-      type: DataTypes.UUID,
-      allowNull: true,
     }
   }, {
     sequelize,
-    modelName: 'Coffee',
+    modelName: 'Product',
   });
-  return Coffee;
+  return Product;
 };
