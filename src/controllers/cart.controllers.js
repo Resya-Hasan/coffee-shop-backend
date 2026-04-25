@@ -171,6 +171,7 @@ module.exports = class CartController {
 
             await cartItem.destroy();
 
+            
             res.status(200).json({
                 status: "success",
                 message: "Cart item deleted"
