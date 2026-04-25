@@ -1,7 +1,8 @@
+const { where } = require('sequelize');
 const { Cart, CartItem, Product } = require('../models');
 
 module.exports = class CartController {
-    static async getCart (req, res, next) {
+    static async getCart(req, res, next) {
         try {
             const userId = req.user.id;
 
@@ -20,7 +21,7 @@ module.exports = class CartController {
                 status: "success",
                 data: cart
             });
-        } catch(err) {
+        } catch (err) {
             next(err)
         }
     }
@@ -73,6 +74,69 @@ module.exports = class CartController {
                 status: "success",
                 message: "Product added to cart",
                 data: cartItem
+            });
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async updateCartItem(req, res, next) {
+        try {
+            const { cartItemId } = req.params;
+            const { quantity } = req.body;
+            const userId = req.user.id;
+
+            const cartItem = await CartItem.findByPk(cartItemId, {
+                include: [
+                    {
+                        model: Product,
+                        attributes: ['id', 'name', 'price', 'stock']
+                    },
+                    {
+                        model: Cart,
+                        where: { userId }
+                    }
+                ]
+            });
+
+            if (cartItem.Cart.userId !== userId) {
+                throw {
+                    name: "forbidden",
+                    message: "You do not have permission to update this cart item"
+                }
+            }
+
+            if (quantity <= 0) {
+                await cartItem.destroy();
+                res.status(200).json({
+                    status: "success",
+                    message: "Product removed from cart"
+                });
+            }
+
+            if (quantity > cartItem.Product.stock) {
+                throw {
+                    name: "bad_request",
+                    message: "Quantity exceeds available stock"
+                }
+            }
+
+            cartItem.quantity = quantity;
+            await cartItem.save();
+
+            res.status(200).json({
+                status: "success",
+                message: "Cart item updated",
+                data: {
+                    id: cartItem.id,
+                    productId: cartItem.productId,
+                    quantity: cartItem.quantity,
+                    product: {
+                        id: cartItem.Product.id,
+                        name: cartItem.Product.name,
+                        price: cartItem.Product.price
+                    }
+                }
             });
         } catch (err) {
             next(err)

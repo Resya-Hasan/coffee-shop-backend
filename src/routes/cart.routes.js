@@ -7,5 +7,6 @@ router.use(authenticationMiddleware);
 
 router.get('/', cartController.getCart);
 router.post('/add', cartController.addToCart);
+router.patch("/update/:cartItemId", cartController.updateCartItem);
 
 module.exports = router;
