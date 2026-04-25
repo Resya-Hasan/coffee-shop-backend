@@ -142,4 +142,41 @@ module.exports = class CartController {
             next(err)
         }
     }
+
+    static async deleteCartItem(req, res, next) {
+        try {
+            const { cartItemId } = req.params;
+            const userId = req.user.id;
+
+            const cartItem = await CartItem.findByPk(cartItemId, {
+                include: {
+                    model: Cart,
+                    where: { userId }
+                }
+            });
+
+            if (!cartItem) {
+                throw {
+                    name: "not_found",
+                    message: "Cart item not found"
+                }
+            }
+
+            if (cartItem.Cart.userId !== userId) {
+                throw {
+                    name: "forbidden",
+                    message: "You do not have permission to delete this cart item"
+                }
+            }
+
+            await cartItem.destroy();
+
+            res.status(200).json({
+                status: "success",
+                message: "Cart item deleted"
+            });
+        } catch (err) {
+            next(err)
+        }
+    }
 }
