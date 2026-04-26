@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.belongsTo(models.Category, { foreignKey: 'categoryId' });
       Product.hasMany(models.ProductImage, { foreignKey: 'productId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
       Product.hasMany(models.CartItem, { foreignKey: 'productId' });
+      Product.hasMany(models.WishList, { foreignKey: 'productId' });
     }
   }
   Product.init({
