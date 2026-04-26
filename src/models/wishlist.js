@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   WishList.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     userId: DataTypes.UUID,
     productId: DataTypes.UUID
   }, {
