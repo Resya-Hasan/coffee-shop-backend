@@ -48,4 +48,28 @@ module.exports = class wishlistController {
             next(err)
         }
     }
+
+    static async removeFromWishlist(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { productId } = req.params;
+
+            const item = await WishList.findOne({ where: { userId, productId } });
+            if (!item) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Product not found in wishlist'
+                });
+            }
+
+            await item.destroy();
+
+            res.status(200).json({
+                success: true,
+                message: 'Product removed from wishlist'
+            });
+        } catch(err) {
+            next(err)
+        }
+    }
 }
